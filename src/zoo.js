@@ -9,7 +9,7 @@ eslint no-unused-vars: [
 ]
 */
 
-const { animals, employees, prices, hours } = require("./data");
+const { animals, employees, prices, hours } = require('./data');
 // const data = require('./data');
 
 // Requisito 1
@@ -26,7 +26,8 @@ const animalsOlderThan = (animal, age) =>
 const employeeByName = (employeeName) => {
   const employeeObj = employees.find(
     (employee) =>
-      employeeName === employee.firstName || employeeName === employee.lastName
+      employeeName === employee.firstName
+      || employeeName === employee.lastName,
   );
   return employeeObj === undefined ? {} : employeeObj;
 };
@@ -34,21 +35,21 @@ const employeeByName = (employeeName) => {
 // Requisito 4
 const createEmployee = (
   { id, firstName, lastName },
-  { managers, responsibleFor }
+  { managers, responsibleFor },
 ) => ({ id, firstName, lastName, managers, responsibleFor });
 
 // Requisito 5
 const isManager = (id) =>
   employees.some((employee) =>
-    employee.managers.some((idManager) => idManager === id)
-  );
+    employee.managers.some((idManager) => idManager === id));
+
 // Requisito 6
 const addEmployee = (
   id,
   firstName,
   lastName,
   managers = [],
-  responsibleFor = []
+  responsibleFor = [],
 ) => {
   const newObj = { id, firstName, lastName, managers, responsibleFor };
   employees.push(newObj);
@@ -74,47 +75,49 @@ const addRegions = () => ({
   NE: [],
   NW: [],
   SE: [],
-  SW: []
+  SW: [],
 });
 const animalsByLocation = () => {
   const listByLocation = addRegions();
   animals.forEach((animal) => {
-      listByLocation[animal.location].push(animal.name);
+    listByLocation[animal.location].push(animal.name);
   });
   return listByLocation;
-}
+};
 
-const getResidentsNames = (animal) =>
-  animal.residents.map((animal) => animal.name);
+const getResidentsNames = (animalType) =>
+  animalType.residents.map((animal) => animal.name);
 
-  const filterResidentsNamesBySex = (animal, sex) =>
-    animal.residents
+const filterResidentsNamesBySex = (animalType, sex) =>
+  animalType.residents
     .filter((animal) => animal.sex === sex)
-    .map((animal) => animal.name);
+    .map((resident) => resident.name);
 
 const animalsByLocationAndName = (sorted, sex) => {
   const listByLocationAndName = addRegions();
-    animals.forEach((animal) => {
-      let residentsNames = '';
-      if(sex) {
-        residentsNames = filterResidentsNamesBySex(animal, sex);
-      } else {
-        residentsNames = getResidentsNames(animal);
-      }
-      if(sorted) {
-        residentsNames.sort();
-      }
-        listByLocationAndName[animal.location].push({[animal.name]: residentsNames});
-    });
-    return listByLocationAndName;
-}
+  animals.forEach((animal) => {
+    let residentsNames = '';
+    if (sex) {
+      residentsNames = filterResidentsNamesBySex(animal, sex);
+    } else {
+      residentsNames = getResidentsNames(animal);
+    }
+    if (sorted) {
+      residentsNames.sort();
+    }
+    listByLocationAndName[animal.location].push({ [animal.name]: residentsNames });
+  });
+  return listByLocationAndName;
+};
 
 function animalMap(options) {
-  if(!options || !options.includeNames)
+  if (!options || !options.includeNames) {
     return animalsByLocation();
+  }
   const { includeNames, sorted, sex } = options;
-  if(includeNames)
+  if (includeNames) {
     return animalsByLocationAndName(sorted, sex);
+  }
 }
 
 // Requisito 10
@@ -122,8 +125,8 @@ function animalMap(options) {
 const changeHour = (hour) => hour - 12;
 
 const scheduleParameterUndefined = (day, open, close) => {
-  if (day === "Monday") {
-    return "CLOSED";
+  if (day === 'Monday') {
+    return 'CLOSED';
   }
   return `Open from ${open}am until ${changeHour(close)}pm`;
 };
@@ -136,8 +139,8 @@ const schedule = (dayName) => {
     const day = x[0];
     if (dayName === undefined) {
       acc[day] = scheduleParameterUndefined(day, open, close);
-    } else if (dayName === "Monday" && day === "Monday") {
-      acc[day] = "CLOSED";
+    } else if (dayName === 'Monday' && day === 'Monday') {
+      acc[day] = 'CLOSED';
     } else if (dayName === day) {
       acc[day] = `Open from ${open}am until ${changeHour(close)}pm`;
     }
@@ -149,8 +152,8 @@ const schedule = (dayName) => {
 
 // Requisito 11
 
-const getBigger = (bigger, number) =>
-  bigger > number.age ? bigger : number.age;
+const getBigger = (bigger, number) => (
+  bigger > number.age ? bigger : number.age);
 
 const oldestFromFirstSpecies = (id) => {
   const employeeObj = employees.find((employee) => employee.id === id);
@@ -159,7 +162,7 @@ const oldestFromFirstSpecies = (id) => {
     .residents;
   const oldestAnimalYears = animalResidents.reduce(getBigger, 0);
   const oldestAnimal = animalResidents.find(
-    (animal) => animal.age === oldestAnimalYears
+    (animal) => animal.age === oldestAnimalYears,
   );
   return [oldestAnimal.name, oldestAnimal.sex, oldestAnimal.age];
 };
@@ -180,9 +183,6 @@ const increasePrices = (percentage) => {
 //     acc[`${employee.firstName} ${employee.lastName}`] = employee.responsibleFor;
 //     return acc;
 //   }, {});
-
-  
-
 //   return obj;
 // };
 
