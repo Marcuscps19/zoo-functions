@@ -84,16 +84,22 @@ const animalsByLocation = () => {
   return listByLocation;
 }
 
+const getResidentsNames = (animal) =>
+  animal.residents.map((animal) => animal.name);
+
+  const filterResidentsNamesBySex = (animal, sex) =>
+    animal.residents
+    .filter((animal) => animal.sex === sex)
+    .map((animal) => animal.name);
+
 const animalsByLocationAndName = (sorted, sex) => {
   const listByLocationAndName = addRegions();
     animals.forEach((animal) => {
       let residentsNames = '';
       if(sex) {
-        residentsNames = animal.residents
-          .filter((animal) => animal.sex === sex)
-          .map((animal) => animal.name);
+        residentsNames = filterResidentsNamesBySex(animal, sex);
       } else {
-        residentsNames = animal.residents.map((animal) => animal.name);
+        residentsNames = getResidentsNames(animal);
       }
       if(sorted) {
         residentsNames.sort();
