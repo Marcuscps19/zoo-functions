@@ -178,13 +178,41 @@ const increasePrices = (percentage) => {
   return prices;
 };
 
-// const employeeCoverage = (idOrName) => {
-//   const obj = employees.reduce((acc, employee) => {
-//     acc[`${employee.firstName} ${employee.lastName}`] = employee.responsibleFor;
-//     return acc;
-//   }, {});
-//   return obj;
-// };
+const responsibleFor = (employee) => employee.responsibleFor
+  .map((id) => animals
+    .find((animal) => animal.id === id).name);
+
+const employeesResponsibleList = () => {
+  const responsibleListByEmployee = {};
+  employees.forEach((employee) => {
+    const employeeName = `${employee.firstName} ${employee.lastName}`;
+    responsibleListByEmployee[employeeName] = responsibleFor(employee);
+  });
+  return responsibleListByEmployee;
+};
+
+const findEmployeeByIdNameOrLastName = (employeeData) => employees
+  .find((employee) => employee.firstName === employeeData
+    || employee.lastName === employeeData
+    || employee.id === employeeData);
+
+const animalsNameByEmployee = (employee) => {
+  const employeeName = `${employee.firstName} ${employee.lastName}`;
+  return { [employeeName]: responsibleFor(employee) };
+};
+
+const employeeAnimals = (employeeData) => {
+  const employee = findEmployeeByIdNameOrLastName(employeeData);
+  return animalsNameByEmployee(employee);
+};
+
+const employeeCoverage = (employeeData) => {
+  if (!employeeData) {
+    return employeesResponsibleList();
+  }
+
+  return employeeAnimals(employeeData);
+};
 
 // console.log(employeeCoverage());
 module.exports = {
@@ -194,7 +222,7 @@ module.exports = {
   animalMap,
   animalsByIds,
   employeeByName,
-  // employeeCoverage,
+  employeeCoverage,
   addEmployee,
   isManager,
   animalsOlderThan,
